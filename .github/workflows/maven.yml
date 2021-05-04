@@ -1,13 +1,28 @@
-name: E2E Test
 
-on: [push]
+name: Java CI with Maven
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
 
 jobs:
-  Gherkin-lint:
-    runs-on: ubuntu-latest
+  build:
+
+    runs-on: ${{matrix.os}}
+    strategy:
+      matrix: 
+        os: [ubuntu-latest]
+
     steps:
+    - uses: actions/checkout@v2
     - uses: actions/checkout@v1
-    - uses: restqa/gherkin-linter-action@0.0.1
+    - name: Set up JDK 11
+      uses: actions/setup-java@v2
       with:
-        path: 'test/'
-        config_file: 'test/.gherkin-lintrc'
+        java-version: '11'
+        distribution: 'adopt'
+    - name: Build with Maven
+      run: mvn -B package --file pom.xml
