@@ -12,6 +12,7 @@ jobs:
   build:
 
     runs-on: ${{matrix.os}}
+    continue-on-error: true
     strategy:
       matrix: 
         os: [ubuntu-latest,windows-latest]
@@ -24,6 +25,7 @@ jobs:
       uses: actions/setup-java@v2
       with:
         java-version: ${{matrix.java}}
+        continue-on-error: true
         distribution: 'adopt'
     - name: Build with Maven
       run: mvn -B -X package --file pom.xml
